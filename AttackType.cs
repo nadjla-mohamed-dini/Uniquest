@@ -1,12 +1,12 @@
 using System;
-
+using UnityEngine;
 public enum AttackType
 {
     Physique,
     Magique,
     Special
 }
-
+[System.Serializable] // ajouter sa pour que ce soit visible dans l'inspecteur nadjla
 public class Attack
 {
     public string Name { get; private set; }
@@ -28,23 +28,23 @@ public class Attack
         CritMultiplier = critMultiplier;
     }
 
-    public bool HitsTarget(Random rng)
+    public bool HitsTarget()
     {
-        return rng.Next(0, 100) < Accuracy;
+        return UnityEngine.Random.Range(0, 100) < Accuracy; // enlever random pour mettre unity.engine random(plus coherent avec unity) nadjla
     }
 
-    public bool IsCritical(Random rng)
+    public bool IsCritical()
     {
-        return rng.NextDouble() < CritChance;
+        return UnityEngine.Random.value < CritChance; // same here nadjla
     }
 
-    public int CalculateDamage(Random rng)
+    public int CalculateDamage()
     {
         int baseDamage = Power;
-        if (IsCritical(rng))
+        if (IsCritical())
         {
-            baseDamage = (int) (baseDamage * CritMultiplier);
-            Console.WriteLine("Coup critique !");
+            baseDamage = Mathf.RoundToInt(baseDamage * CritMultiplier);
+            Debug.Log("Coup critique !");
         }
         return baseDamage;
     }
